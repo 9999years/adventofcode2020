@@ -3,7 +3,7 @@
 let
   ghc = haskellPackages.ghcWithPackages (hpkgs:
     with hpkgs;
-    [ relude ] ++ lib.optionals development [ apply-refact retrie ]);
+    [ relude parsec ] ++ lib.optionals development [ apply-refact retrie ]);
 
   hlintReludeYaml = fetchurl {
     url =

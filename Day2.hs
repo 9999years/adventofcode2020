@@ -1,13 +1,14 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 
-import Aoc (aoc)
+import Aoc (aoc, parseInt)
 import qualified Data.Bifunctor
 import qualified Data.Text as T
 import Relude
-import Text.Read (read)
+import Text.Parsec as P
+import Text.Parsec.Text
 
 main :: IO ()
-main = aoc parse part1 part2
+main = aoc parsePolicies part1 part2
 
 part1 :: [(Policy, Text)] -> Int
 part1 passwords =
@@ -25,21 +26,25 @@ part2 passwords =
 contains :: (Int, Int) -> Int -> Bool
 (lo, hi) `contains` val = val >= lo && val <= hi
 
-data Policy = Policy (Int, Int) Char deriving (Show)
-
-parsePolicy :: Text -> (Policy, Text)
-parsePolicy input =
-  let (lo, input1) = T.breakOn (one '-') input
-      (hi, input2) = T.breakOn (one ' ') (T.drop 1 input1)
-      (char, input3) = T.breakOn (one ':') (T.drop 1 input2)
-   in (Policy ((read . toString) lo, (read . toString) hi) (T.head char), T.drop 2 input3)
-
-parse :: Text -> [(Policy, Text)]
-parse input =
-  Data.Bifunctor.second T.stripStart <$> (parsePolicy <$> lines input)
-
 occursIn :: Char -> Text -> Int
 occursIn char = T.foldl (\n c -> if c == char then 1 + n else n) 0
 
 boolXor :: Bool -> Bool -> Bool
 a `boolXor` b = (a && not b) || (not a && b)
+
+data Policy = Policy (Int, Int) Char deriving (Show)
+
+parsePolicy :: Parser (Policy, Text)
+parsePolicy = do
+  lo <- parseInt
+  char '-'
+  hi <- parseInt
+  char ' '
+  policyChar <- lower
+  string ": "
+  password <- many1 lower
+  return (Policy (lo, hi) policyChar, toText password)
+
+parsePolicies :: Parser [(Policy, Text)]
+parsePolicies =
+  parsePolicy `endBy1` newline

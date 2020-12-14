@@ -2,7 +2,7 @@
 
 import Aoc
   ( aoc,
-    intLines,
+    parseIntLines,
     uniquePairs,
     uniqueTriples,
   )
@@ -10,7 +10,7 @@ import Relude
 import Relude.Unsafe as Unsafe
 
 main :: IO ()
-main = aoc intLines (sumTo2020Mult . uniquePairs) (sumTo2020Mult . uniqueTriples)
+main = aoc parseIntLines (sumTo2020Mult . uniquePairs) (sumTo2020Mult . uniqueTriples)
 
 sumTo2020Mult entries =
   entries
