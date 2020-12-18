@@ -1,5 +1,9 @@
 { stdenv, lib, fetchurl, runCommand, makeWrapper, haskellPackages, hlint
-, stylish-haskell, haskell-language-server, ormolu, development ? false }:
+, stylish-haskell, haskell-language-server, ormolu
+
+# Should we load development utilities and tools, like language servers and
+# linters? Intended for use with nix-shell.
+, development ? false }:
 let
   ghc = haskellPackages.ghcWithPackages (hpkgs:
     with hpkgs;
