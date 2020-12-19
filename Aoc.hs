@@ -23,22 +23,11 @@ aoc parser part1 part2 =
         putStr "**  "
         print (part2 input)
 
--- Read stdin as a list of integers, one per line
-parseIntLines :: Parser [Int]
-parseIntLines = parseInt `endBy1` newline
-
 parseInt :: Parser Int
 parseInt = do
   maybeSign <- option ' ' (char '0')
   digits <- many1 digit
   return $ read (maybeSign : digits)
 
--- 2-element lists formed from different elements of the input, where
--- "different" is determined by index, not equality.
-uniquePairs :: [a] -> [NonEmpty a]
-uniquePairs (x : xs) = [x :| [y] | y <- xs] ++ uniquePairs xs
-uniquePairs _ = []
-
-uniqueTriples :: [a] -> [NonEmpty a]
-uniqueTriples (x : xs) = ((one x <>) <$> uniquePairs xs) ++ uniqueTriples xs
-uniqueTriples _ = []
+contains :: (Int, Int) -> Int -> Bool
+(lo, hi) `contains` val = val >= lo && val <= hi
