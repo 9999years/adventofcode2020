@@ -1,6 +1,6 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 
-import Aoc (aoc, parseInt)
+import Aoc (aoc, contains, parseInt)
 import qualified Data.Bifunctor
 import qualified Data.Text as T
 import Relude
@@ -22,9 +22,6 @@ part2 passwords =
         let oneIndex i = password `T.index` (i - 1)
          in (oneIndex i1 == char) `boolXor` (oneIndex i2 == char)
    in filter isValid passwords & length
-
-contains :: (Int, Int) -> Int -> Bool
-(lo, hi) `contains` val = val >= lo && val <= hi
 
 occursIn :: Char -> Text -> Int
 occursIn char = T.foldl (\n c -> if c == char then 1 + n else n) 0

@@ -7,7 +7,8 @@
 let
   ghc = haskellPackages.ghcWithPackages (hpkgs:
     with hpkgs;
-    [ relude parsec ] ++ lib.optionals development [ apply-refact retrie ]);
+    [ relude parsec lens ]
+    ++ lib.optionals development [ apply-refact retrie ]);
 
   hlintReludeYaml = fetchurl {
     url =
